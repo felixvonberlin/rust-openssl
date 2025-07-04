@@ -54,7 +54,7 @@ use crate::cipher::CipherRef;
 use crate::error::ErrorStack;
 #[cfg(not(any(boringssl, awslc)))]
 use crate::pkey::{HasPrivate, HasPublic, PKey, PKeyRef};
-use crate::{cvt, cvt_p};
+use crate::{cvt, cvt_p, cvt_n};
 #[cfg(ossl102)]
 use bitflags::bitflags;
 use cfg_if::cfg_if;
@@ -704,7 +704,7 @@ impl CipherCtxRef {
     ) -> Result<usize, ErrorStack> {
         let mut outl = 0;
 
-        cvt(ffi::EVP_CipherFinal(
+        cvt_n(ffi::EVP_CipherFinal(
             self.as_ptr(),
             output.as_mut_ptr(),
             &mut outl,
